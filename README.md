@@ -2,7 +2,7 @@
 ## A start-up kit for front end web developers
 
 ### Requirements
-This project have some requirements you need to meet in order to compile it. First of all, you need NodeJS in order to run javascript on the console, you can go to the [NodeJS](http://nodejs.rg) site and follow trough the installation process. After you get the `node` command on the console, you need to install Gulp and Bower globally with the following command.
+This project have some requirements you need to meet in order to compile it. First of all, you need NodeJS in order to run javascript on the console, you can go to the [NodeJS](http://nodejs.org) site and follow trough the installation process. After you get the `node` command on the console, you need to install Gulp and Bower globally with the following command.
 
 ```
 node install -g gulp bower
