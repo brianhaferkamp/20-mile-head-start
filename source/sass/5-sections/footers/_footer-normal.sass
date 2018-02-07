@@ -1,0 +1,53 @@
+#footer-normal
+  text-align: center
+  padding: 2rem 1rem
+  background: #444
+
+  @media (min-width: 600px)
+    .section-inner
+      display: flex
+      justify-content: space-between
+      align-items: center
+
+@media (min-width: 600px)
+  #footer-normal
+    padding: 1rem
+
+
+// Logo & copyright
+
+.footer-logo
+  margin-bottom: 2rem
+
+  img
+    width: auto
+
+@media (min-width: 600px)
+  .footer-logo
+    margin: 0
+
+
+// Navigation
+
+.footer-nav
+  ul
+    list-style: none
+    padding: 0
+    margin: 0
+
+    a
+      color: $white
+
+      &:hover
+        color: rgba($white, 0.8)
+
+    li
+      margin: 1rem
+
+    @media (min-width: 600px)
+      li
+        margin: 0 1rem
+
+  @media (min-width: 600px)
+    ul
+      display: flex

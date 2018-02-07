@@ -1,0 +1,32 @@
+{
+  "name": "20-hour-head-start",
+  "version": "1.0.0",
+  "authors": [
+    "Brian Hafekramp <brian.haferkamp@gmail.com>"
+  ],
+  "description": "A build system and module templates for front end web developers",
+  "main": "build/index.html",
+  "keywords": [
+    "boilerplate",
+    "seed",
+    "20-hour head start",
+    "kit",
+    "starter kit",
+    "devtips",
+    "sass",
+    "jade",
+    "gulp"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "source/vendors",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}

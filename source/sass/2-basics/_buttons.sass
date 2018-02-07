@@ -1,0 +1,59 @@
+//--------------------------------------------------------------
+ // BUTTON STYLES
+//--------------------------------------------------------------
+
+.button
+  display: inline-block
+  background:
+    color: $black
+  color: $white
+  text-decoration: none
+  padding: .5rem 1rem
+  cursor: pointer
+
+  &:hover
+    background:
+      color: rgba($black, 0.8)
+
+.button-inverse
+  display: inline-block
+  background:
+    color: $white
+  color: $black
+  text-decoration: none
+  padding: .5rem 1rem
+  cursor: pointer
+
+  &:hover
+    background:
+      color: rgba($white, 0.8)
+
+.button-ghost
+  display: inline-block
+  background:
+    color: transparent
+  color: $black
+  text-decoration: none
+  padding: .5rem 1rem
+  border: 1px solid $black
+  cursor: pointer
+
+  &:hover
+    background:
+      color: $white
+    border: 1px solid $white
+
+.button-ghost-inverse
+  display: inline-block
+  background:
+    color: transparent
+  color: $white
+  text-decoration: none
+  padding: .5rem 1rem
+  border: 1px solid $white
+  cursor: pointer
+
+  &:hover
+    background:
+      color: $black
+    border: 1px solid $black

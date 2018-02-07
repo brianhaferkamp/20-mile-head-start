@@ -1,0 +1,45 @@
+#features-grid
+  padding: 2rem 0
+
+  .section-inner
+    padding: 1rem
+
+  .features-group
+    margin: 2rem 1rem
+
+  // Flexbox fallback
+
+  @media (min-width: 500px)
+    .features-grid
+      display: flex
+      flex-wrap: wrap
+
+  @media (min-width: 500px)
+    .features-group
+      flex: 0 1 43%
+
+  @media (min-width: 1024px)
+    .features-group
+      flex: 0 1 30%
+
+// code for browsers that support CSS Grid Layout
+
+@supports (display: grid)
+  .features-grid
+    display: grid
+    grid-template-columns: 1fr
+    grid-template-rows: auto
+    grid-gap: 2rem 1rem
+    margin: 0
+
+  @media (min-width: 500px) and (max-width: 768px)
+    .features-grid
+      grid-template-columns: repeat(2, 1fr)
+
+  @media (min-width: 769px)
+    .features-grid
+      grid-template-columns: repeat(3, 1fr)
+
+  @media (min-width: 769px)
+    .features-group
+      margin: 0
