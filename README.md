@@ -68,7 +68,7 @@ This project has some nice configuration options to meet your needs. To configur
 ### Credits
 This build system was built on top of the work of two other developers:
 
-[Travis Neilson](http://travisneilson.com)
+[Travis Neilson](http://travisneilson.com), 
 [Maikel Rivero Dorta](https://github.com/mriverodorta)
 
 All modules and SASS files were written by [Brian Haferkamp](https://twitter.com/BrianHaferkamp)
