@@ -1,0 +1,20 @@
+{
+  "short_name": "",
+  "name": "",
+  "start_url": "",
+  "icons": [
+    {
+      "src": "assets/img/",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/img/",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "",
+  "display": "minimal-ui",
+  "theme_color": ""
+}
