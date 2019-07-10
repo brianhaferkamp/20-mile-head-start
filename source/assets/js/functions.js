@@ -1,6 +1,8 @@
+// Check the browser to make sure if allows service workers
 if('serviceWorker' in navigator) {
   navigator.serviceWorker
-    .register('') // path to service worker
+    // Register the path to the service worker file
+    .register('')
     .then(function() { console.log("Service Worker Registered"); });
 }
 
