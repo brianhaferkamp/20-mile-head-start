@@ -1,43 +1,51 @@
 <!DOCTYPE html>
 html(lang="en")
   head
+    //--------------------------------------
+    // Meta information
+    //--------------------------------------
+
     title The 20-Mile Head Start for Front End Developers
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1")
+
+    //--------------------------------------
     // Load a favicon
-    link(rel="shortcut icon", href="./assets/img/favicons/favicon.ico")
+    //--------------------------------------
+
+    // link(rel="shortcut icon", href="./assets/img/favicons/favicon.ico")
+
+    //--------------------------------------
     // Load font icons
     // Material Design Iconic Font - (http://zavoloklom.github.io/material-design-iconic-font/index.html)
+    //--------------------------------------
+
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css")
+
+    //--------------------------------------
     // Load Google Fonts
+    //--------------------------------------
+
+    //--------------------------------------
+    // Load Adobe Fonts
+    //--------------------------------------
+
+    //--------------------------------------
     // Load the main stylesheet
+    //--------------------------------------
+    
     link(rel="stylesheet", href="assets/css/main.css")
 
   body
 
-    #mastheads
-      include partials/mastheads/masthead-normal
-
-    #heroes
-      include partials/heroes/hero-text-overlay
-      include partials/heroes/hero-two-up
-
-    #features
-      include partials/features/features-vertical
-      include partials/features/features-grid
-      include partials/features/features-text
-      include partials/features/features-large-image-text
-
-    #products
-      include partials/products/product-grid
-
-    #footers
-      include partials/footers/footer-normal
 
 
+
+
+    //- Load Scripts
 
     // Loads jQuery (Delete if you're using vanilla JS)
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+    script(src="https://code.jquery.com/jquery-3.4.1.min.js", integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=", crossorigin="anonymous")
 
     // Loads app-specific JS
     script(src="./assets/js/app.js")
