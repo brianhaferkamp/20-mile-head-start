@@ -1,211 +1,137 @@
-//---------------------------------------------------------------------------
- // 20 Hour Head Start configuration file
- // Feel free to modify this file as you need
- // File created by Maikel Rivero Dorta (@mriverodorta)
-//---------------------------------------------------------------------------
+//---------------------------------------
+// variables
+//---------------------------------------
+const browsersync = require("browser-sync").create();
+const del = require("del");
+const gulp = require("gulp");
+const concat = require("gulp-concat"); // combine multiple .js files into one
+const deporder = require("gulp-deporder");
+const htmlclean = require("gulp-htmlclean"); // extreme minification
+const jshint = require("gulp-jshint"); // error reporting in js
+const newer = require("gulp-newer");
+const pleeease = require("gulp-pleeease");
+const plumber = require("gulp-plumber");
+const pug = require("gulp-pug"); // process .pug files into .html
+const sass = require("gulp-sass"); // process .sass files into .css
+const size = require("gulp-size"); // calculate file sizes
+const stripdebug = require("gulp-strip-debug"); // debugger
+const uglify = require("gulp-uglify"); // minify .js files
 
-// Include gulp plugins
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')({ lazy: true });
-var browsersync = require('browser-sync');
-var del = require('del');
-var config = require('./config.js')();
-
-// Configs
-var
-  devBuild = ((config.environment || process.env.NODE_ENV || 'development').trim().toLowerCase() !== 'production'),
-  source = config.source[--config.source.length] == '/' ? config.source : config.source + '/',
-  dest = config.build[--config.build.length] == '/' ? config.build : config.build + '/',
-  pkg = require('./package.json'),
-  images = {
-    in: source + (config.images[--config.images.length] == '/' ? config.images + '**/*.*' : config.images + '/**/*.*'),
-    out: dest + config.images
-  },
-  views = {
-    in: source + (config.views[--config.views.length] == '/' ? config.views + '*.pug' : config.views + '/*.pug'),
-    out: dest,
-    watch: source + (config.views[--config.views.length] == '/' ? config.views + '**/*' : config.views + '/**/*')
-  },
-  styles = {
-    in: source + config.sass,
-    watch: [source + config.sass.substring(0, (config.sass.lastIndexOf('/') + 1)) + '**/*'],
-    out: dest + (config.css[--config.css.length] == '/' ? config.css : config.css + '/'),
-    sassOpt: {
-      outputStyle: config.sassOptions.outputStyle || 'expanded',
-      imagePath: config.sassOptions.imagePath,
-      precision: config.sassOptions.precision || 3,
-      errLogToConsole: true
-    },
-    pleeeaseOpt: {
-      autoprefixer: { browsers: ['last 2 versions', '> 2%'] },
-      rem: ['16px'],
-      pseudoElements: true,
-      mqpacker: true,
-      minifier: !devBuild
-    }
-  },
-  js = {
-    in: source + (config.jsDir[--config.jsDir.length] == '/' ? config.jsDir + '**/*' : config.jsDir + '/**/*'),
-    out: dest + config.jsDir,
-    filename: config.jsName
-  },
-  syncOpt = {
-    server: {
-      baseDir: dest,
-      index: config.syncOptions.index || 'index.html'
-    },
-    open: config.syncOptions.open || false,
-    notify: config.syncOptions.notify || true
-  },
-  pugOptions = { pretty: devBuild, basedir: source + config.views },
-  vendors = {
-    in: source + (config.vendors[--config.vendors.length] == '/' ? config.vendors + '**/*' : config.vendors + '/**/*'),
-    out: dest + (config.vendors[--config.vendors.length] == '/' ? config.vendors : config.vendors + '/'),
-    watch: [source + (config.vendors[--config.vendors.length] == '/' ? config.vendors + '**/*' : config.vendors + '/**/*')]
-  };
-
-console.log(pkg.name + ' ' + pkg.version + ' ' + config.environment + ' build');
-
-/**
- * Tasks
- */
-//Clean the build folder
-gulp.task('clean', function () {
-  log('-> Cleaning build folder')
-  del([
-    dest + '*'
-  ]);
-});
-
-// Compile Javascript files
-gulp.task('js', function () {
-  if (devBuild) {
-    log('-> Compiling Javascript for Development')
-    return gulp.src(js.in)
-      .pipe($.plumber())
-      .pipe($.newer(js.out))
-      .pipe($.jshint())
-      .pipe($.jshint.reporter('jshint-stylish', { verbose: true }))
-      .pipe($.jshint.reporter('fail'))
-      .pipe($.concat(js.filename))
-      .pipe(gulp.dest(js.out));
-  } else {
-    log('-> Compiling Javascript for Production')
-    del([
-      dest + 'js/*'
-    ]);
-    return gulp.src(js.in)
-      .pipe($.plumber())
-      .pipe($.deporder())
-      .pipe($.concat(js.filename))
-      .pipe($.size({ title: 'Javascript In Size' }))
-      .pipe($.stripDebug())
-      .pipe($.uglify())
-      .pipe($.size({ title: 'Javascript Out Size' }))
-      .pipe(gulp.dest(js.out));
-  }
-});
-
-// Update images on build folder
-gulp.task('images', function () {
-  return gulp.src(images.in)
-    .pipe($.newer(images.out))
-    .pipe(gulp.dest(images.out));
-});
-
-// Update Favicon on build folder
-gulp.task('favicon', function () {
-  return gulp.src(source + config.favicon)
-    .pipe($.newer(dest))
-    .pipe(gulp.dest(dest));
-});
-
-// Copy all vendors to build folder
-gulp.task('vendors', function () {
-  return gulp.src(vendors.in)
-    .pipe($.newer(vendors.out))
-    .pipe(gulp.dest(vendors.out));
-});
-
-//Compile Pug templates
-gulp.task('pug', function () {
-  log('-> Compiling Pug Templates')
-
-  return gulp.src(views.in)
-    .pipe($.plumber())
-    .pipe($.newer(views.out))
-    .pipe($.pug(pugOptions))
-    .pipe(gulp.dest(views.out));
-});
-
-// Compile Sass styles
-gulp.task('sass', function () {
-  log('-> Compile SASS Styles')
-  return gulp.src(styles.in)
-    .pipe($.plumber())
-    .pipe($.sass(styles.sassOpt))
-    .pipe($.size({ title: 'styles In Size' }))
-    .pipe($.pleeease(styles.pleeeaseOpt))
-    .pipe($.size({ title: 'styles Out Size' }))
-    .pipe(gulp.dest(styles.out))
-    .pipe(browsersync.reload({ stream: true }));
-});
-
-// Start BrowserSync
-gulp.task('browsersync', function () {
-  log('-> Starting BrowserSync')
-  browsersync(syncOpt);
-});
-
-// Build Task
-gulp.task('build', ['sass', 'pug', 'js', 'images', 'vendors', 'favicon']);
-
-// Watch Task
-gulp.task('watch', ['browsersync'], function () {
-  // Watch for style changes and compile
-  gulp.watch(styles.watch, ['sass']);
-  // Watch for pug changes and compile
-  gulp.watch(views.watch, ['pug', browsersync.reload]);
-  // Watch for javascript changes and compile
-  gulp.watch(js.in, ['js', browsersync.reload]);
-  // Watch for new vendors and copy
-  gulp.watch(vendors.watch, ['vendors']);
-  // Watch for new images and copy
-  gulp.watch(images.in, ['images']);
-});
-
-// Compile and Watch task
-gulp.task('start', ['build', 'watch']);
-
-// Help Task
-gulp.task('help', function () {
-  console.log('');
-  console.log('===== Help for DevTips Starter Kit =====');
-  console.log('');
-  console.log('Usage: gulp [command]');
-  console.log('The commands for the task runner are the following.');
-  console.log('-------------------------------------------------------');
-  console.log('       clean: Removes all the compiled files on ./build');
-  console.log('          js: Compile the JavaScript files');
-  console.log('        pug: Compile the Pug templates');
-  console.log('        sass: Compile the Sass styles');
-  console.log('      images: Copy the newer to the build folder');
-  console.log('     favicon: Copy the favicon to the build folder');
-  console.log('     vendors: Copy the vendors to the build folder');
-  console.log('       build: Build the project');
-  console.log('       watch: Watch for any changes on the each section');
-  console.log('       start: Compile and watch for changes (for dev)');
-  console.log('        help: Print this message');
-  console.log(' browsersync: Start the browsersync server');
-  console.log('');
-});
-
-// Default Task
-gulp.task('default', ['help']);
-
-/**
- * Custom functions
- */
-function log(msg) {
-  console.log(msg);
+//---------------------------------------
+// file paths
+//---------------------------------------
+const files = {
+  sassPath: 'source/sass/**/*.sass',
+  jsPath: 'source/assets/js/*.js',
+  pugPath: 'source/views/**/*.pug',
+  imgPath: 'source/assets/img/*',
+  downloadsPath: 'source/assets/downloads/*'
 }
+
+//---------------------------------------
+// remove files from /build folder
+//---------------------------------------
+function clean() {
+  return del([
+    'build/*'
+  ]);
+}
+
+exports.clean = clean;
+
+//---------------------------------------
+// SASS Task
+//---------------------------------------
+function sassTask() {
+  return gulp.src(files.sassPath)
+    .pipe(plumber())
+    .pipe(sass())
+    .pipe(size({title: 'Styles In Size'}))
+    .pipe(pleeease())
+    .pipe(size({title: 'Styles Out Size'}))
+    .pipe(gulp.dest('./build/assets/css'))
+    .pipe(browsersync.stream())
+}
+
+//---------------------------------------
+// JS Task
+//---------------------------------------
+function js() {
+  return gulp.src(files.jsPath)
+    .pipe(plumber())
+    .pipe(newer(files.jsPath))
+    .pipe(jshint())
+    .pipe(deporder())
+    .pipe(concat('app.js'))
+    .pipe(size({title: 'Javascript In Size'}))
+    .pipe(stripdebug())
+    .pipe(uglify())
+    .pipe(size({title: 'Javascript Out Size'}))
+    .pipe(gulp.dest('./build/assets/js'))
+}
+
+//---------------------------------------
+// pugjs sassTask
+//---------------------------------------
+function pugTask() {
+  return gulp.src(files.pugPath)
+    .pipe(plumber())
+    .pipe(newer(files.pugPath))
+    .pipe(pug())
+    .pipe(htmlclean())
+    .pipe(gulp.dest('./build'))
+    .pipe(browsersync.stream());
+    browsersync.reload
+}
+
+//---------------------------------------
+// compile images from /source to /build
+//---------------------------------------
+function images() {
+  return gulp.src(files.imgPath)
+    .pipe(newer(files.imgPath))
+    .pipe(gulp.dest('./build/assets/img'));
+}
+
+//---------------------------------------
+// move downloads from /source to /build
+//---------------------------------------
+function downloads() {
+  return gulp.src(files.downloadsPath)
+    .pipe(newer(files.downloadsPath))
+    .pipe(gulp.dest('./build/assets/downloads'));
+}
+
+
+//---------------------------------------
+// Watch for changes in the code
+//---------------------------------------
+function watch() {
+  gulp.watch([files.pugPath, files.sassPath, files.jsPath, files.imgPath, files.downloadsPath],
+    gulp.series(pugTask, sassTask, js, images, downloads))
+
+  // gulp.parallel(pugTask, sassTask, js, images, downloads)
+
+  // initiate BrowserSync
+  browsersync.init({
+      server: {
+          // serve files from the /build folder
+          baseDir: "./build"
+      }
+  });
+
+  // watch for SASS changes
+  gulp.watch(files.sassPath, sassTask);
+  // watch for changes in the HTML
+  gulp.watch(files.pugPath).on('change', browsersync.reload);
+  // watch for image changes
+  gulp.watch(files.imgPath).on('change', browsersync.reload);
+}
+
+//---------------------------------------
+// type 'gulp start' to run the build
+//---------------------------------------
+exports.start = gulp.series(
+  gulp.parallel(pugTask, sassTask, js, images, downloads),
+  watch
+)
