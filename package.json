@@ -4,7 +4,7 @@
   "description": "A modern, Gulp-based front end development build process for HTML, CSS, and JS websites",
   "main": "gulpfile.js",
   "dependencies": {
-    "browser-sync": "^2.26.7",
+    "browser-sync": "^2.27.10",
     "del": "^5.1.0",
     "gulp-concat": "^2.6.1",
     "gulp": "^4.0.2",
